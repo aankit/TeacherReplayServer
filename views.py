@@ -1,10 +1,10 @@
-from hello import app
+from replay import app
 import subprocess
 
 @app.route('/')
 @app.route('/index')
 def index():
-    return "Building Flask From Scratch!"
+    return "Welcome to Teacher Replay!"
 
 @app.route('/cam/<state>')
 def cam(state):
