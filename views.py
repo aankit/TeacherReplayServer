@@ -3,11 +3,22 @@ from replaydb.database import db_session
 from replaydb.database import *
 from flask import render_template
 import subprocess
+import os
 
 @app.route('/')
 @app.route('/index')
 def index():
-    return "Welcome to Teacher Replay!"
+    user = {'nickname' : 'Teacher'}
+    navigation = {'Set Goals': '/goals',
+            'View Replays': '/replays',
+            'Save Evidence': '/evidence',
+            'Schedule' :'/schedule',
+            'Sharing': '/sharing'
+            }
+    return render_template('index.html',
+            title='Home',
+            user=user,
+            navigation=navigation)
 
 #@app.route('/login', methods=['GET', 'POST'])
 #def login():
@@ -16,28 +27,13 @@ def index():
 #    else:
 #        return 'No login page yet.'
 
-@app.route('/cam/<state>')
-def cam(state):
-    if state == 'on':
-        cmd = ["touch", "/home/pi/hooks/start_record"]
-        p = subprocess.Popen(cmd, stdout = subprocess.PIPE, stderr = subprocess.PIPE, stdin = subprocess.PIPE)
-        out, err = p.communicate()
-        return out
-    elif state == 'off':
-        cmd = ["touch", "/home/pi/hooks/stop_record"]
-        p = subprocess.Popen(cmd, stdout = subprocess.PIPE, stderr = subprocess.PIPE, stdin = subprocess.PIPE)
-        out, err = p.communicate()
-        return out
-    else:
-        return "Please either send on or off. Thanks, your friendly neighborhood API."
+@app.route('/schedule', methods=['GET', 'POST'])
+def schedule():
+    return 'schedule page'
 
-#@app.route('/schedule', methods=['GET', 'POST'])
-#def schedule():
-#    return 'schedule page'
-
-@app.route('/marker/<datetime>/<mode>')
-def marker(datetime, mode):
-    return '%s with %s mode' %(datetime, mode)
-
-    mode_obj = Mode(mode)
-
+@app.route('/replays')
+def replays():
+    video_path = '/var/www/replay/videos'
+    list_of_videos = os.listdir(video_path)
+    videos = dict(zip(list_of_videos, ["/videos/%s" %(vid) for vid in list_of_videos]))
+    return render_template('videos.html', title='Videos', list_of_videos=videos)

@@ -1,0 +1,13 @@
+<html>
+    <head>
+        <title>{{ title }} - microblog</title>
+    </head>
+    <body>
+        <h1>Hello, {{ user.nickname }}!</h1>
+        <ul>
+            {% for name, url in navigation.iteritems() %}
+            <li><a href={{url}}>{{name}}</a></li>
+            {% endfor %}
+        </ul>
+    </body>
+</html>

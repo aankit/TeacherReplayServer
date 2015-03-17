@@ -1,0 +1,12 @@
+<html>
+    <head>
+        <title>{{ title }} - microblog</title>
+    </head>
+    <body>
+        <ul id="list_of_videos">
+            {% for filename, url in list_of_videos.iteritems() %}
+            <li><a href={{url}}>{{ filename }}</a></li>
+            {% endfor %}
+        </ul>
+    </body>
+</html>
