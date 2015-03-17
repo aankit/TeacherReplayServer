@@ -1,5 +1,6 @@
 from replay import app
 from replaydb.database import db_session
+from replaydb.database import *
 from flask import render_template
 import subprocess
 
@@ -37,3 +38,6 @@ def cam(state):
 @app.route('/marker/<datetime>/<mode>')
 def marker(datetime, mode):
     return '%s with %s mode' %(datetime, mode)
+
+    mode_obj = Mode(mode)
+
