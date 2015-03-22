@@ -18,16 +18,20 @@ import subprocess
 
 @app.route('/record/<state>')
 def record(state):
+    return_text = ""
     if state == 'on':
-        cmd = ["touch", "/home/pi/hooks/start_record"]
-        p = subprocess.Popen(cmd, stdout = subprocess.PIPE, stderr = subprocess.PIPE, stdin = subprocess.PIPE)
-        out, err = p.communicate()
-        return out
+        cam = subprocess.call(["sudo", "service", "picam", "start"])
+        if cam == 0:
+            return_text += "cam on:"
+            record = subprocess.call(["touch", "/home/pi/hooks/start_record"])
+            if record == 0:
+                return return_text + "we are now recording video and audio!"
     elif state == 'off':
-        cmd = ["touch", "/home/pi/hooks/stop_record"]
-        p = subprocess.Popen(cmd, stdout = subprocess.PIPE, stderr = subprocess.PIPE, stdin = subprocess.PIPE)
-        out, err = p.communicate()
-        return out
+        record = subprocess.call(["touch", "/home/pi/hooks/stop_record"])
+        if record == 0:
+            cam = subprocess.call(["sudo", "service", "picam", "stop"])
+            if cam == 0:
+                return "successfully shutdown"
     else:
         return "Please either send on or off. Thanks, your friendly neighborhood API."
 
